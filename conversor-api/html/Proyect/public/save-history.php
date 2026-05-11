@@ -1,22 +1,22 @@
 <?php
 
-require_once '../vendor/autoload.php';
+header("Access-Control-Allow-Origin: *");
 
-use App\Services\HistoryService;
+include("../config/conexion.php");
 
 $data = json_decode(
     file_get_contents("php://input")
 );
 
-$service = new HistoryService();
+$sql = "INSERT INTO historial
+(usuario_id,origen,destino,cantidad,resultado)
+VALUES(
+'$data->usuario_id',
+'$data->origen',
+'$data->destino',
+'$data->cantidad',
+'$data->resultado'
+)";
 
-$result = $service->save(
-    $data->usuario_id,
-    $data->origen,
-    $data->destino,
-    $data->cantidad,
-    $data->resultado,
-    $data->tasa
-);
-
-echo json_encode($result);
+$conexion->query($sql);
+?>

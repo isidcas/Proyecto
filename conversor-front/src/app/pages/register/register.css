@@ -1,0 +1,79 @@
+/* CENTRADO */
+.register-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3a8a, #0ea5e9);
+  font-family: Arial, sans-serif;
+}
+
+/* CARD */
+.register-card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  width: 320px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+/* TITULO */
+.register-card h1 {
+  margin-bottom: 10px;
+  color: #1e3a8a;
+}
+
+/* SUBTITULO */
+.subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 5px rgba(14,165,233,0.4);
+}
+
+/* BOTÓN */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #1e3a8a;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+/* LINK */
+.link {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.link a {
+  color: #0ea5e9;
+  text-decoration: none;
+  font-weight: bold;
+}

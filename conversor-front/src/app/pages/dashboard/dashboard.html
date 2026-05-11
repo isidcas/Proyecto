@@ -1,1 +1,29 @@
-<p>dashboard works!</p>
+<app-navbar></app-navbar>
+
+<h1>Conversor de Divisas</h1>
+
+<div class="card">
+
+  <input type="number" [(ngModel)]="conversion.cantidad">
+
+  <select [(ngModel)]="conversion.origen">
+    <option>USD</option>
+    <option>EUR</option>
+    <option>GBP</option>
+  </select>
+
+  <select [(ngModel)]="conversion.destino">
+    <option>EUR</option>
+    <option>USD</option>
+    <option>GBP</option>
+  </select>
+
+  <button (click)="convertir()" type="button">
+    Convertir
+  </button>
+
+</div>
+
+<h2 *ngIf="resultado !== null">
+  Resultado: {{ resultado }}
+</h2>

@@ -1,1 +1,19 @@
-<p>historial works!</p>
+<app-navbar></app-navbar>
+
+<h1>Historial</h1>
+
+<table>
+  <tr>
+    <th>Origen</th>
+    <th>Destino</th>
+    <th>Cantidad</th>
+    <th>Resultado</th>
+  </tr>
+
+  <tr *ngFor="let item of data">
+    <td>{{ item.from }}</td>
+    <td>{{ item.to }}</td>
+    <td>{{ item.amount }}</td>
+    <td>{{ item.result }}</td>
+  </tr>
+</table>

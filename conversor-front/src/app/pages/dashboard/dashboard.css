@@ -1,0 +1,28 @@
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  color: #0ea5e9;
+}
+
+.card {
+  width: 300px;
+  margin: 30px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, select {
+  padding: 10px;
+}
+
+button {
+  background: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 10px;
+}

@@ -1,19 +1,31 @@
 <?php
 
-require_once '../vendor/autoload.php';
+header("Access-Control-Allow-Origin: *");
 
-use App\Services\AuthService;
+include("../config/conexion.php");
 
 $data = json_decode(
     file_get_contents("php://input")
 );
 
-$service = new AuthService();
+$nombre = $data->nombre;
 
-$result = $service->register(
-    $data->nombre,
-    $data->email,
-    $data->password
+$email = $data->email;
+
+$password = password_hash(
+    $data->password,
+    PASSWORD_DEFAULT
 );
 
-echo json_encode($result);
+$sql = "INSERT INTO usuarios
+(nombre,email,password)
+VALUES
+('$nombre','$email','$password')";
+
+if($conexion->query($sql)){
+
+    echo json_encode([
+        "mensaje"=>"Usuario creado"
+    ]);
+}
+?>

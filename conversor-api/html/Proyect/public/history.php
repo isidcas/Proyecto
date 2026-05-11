@@ -1,13 +1,22 @@
 <?php
 
-require_once '../vendor/autoload.php';
+header("Access-Control-Allow-Origin: *");
 
-use App\Services\HistoryService;
+include("../config/conexion.php");
 
 $id = $_GET['id'];
 
-$service = new HistoryService();
+$sql = "SELECT * FROM historial
+WHERE usuario_id='$id'";
 
-$result = $service->getByUser($id);
+$resultado = $conexion->query($sql);
 
-echo json_encode($result);
+$datos = [];
+
+while($fila = $resultado->fetch_assoc()){
+
+    $datos[] = $fila;
+}
+
+echo json_encode($datos);
+?>

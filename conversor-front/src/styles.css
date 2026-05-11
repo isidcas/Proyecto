@@ -1,1 +1,141 @@
-/* You can add global styles to this file, and also import other style files */
+/* GENERAL */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #0ea5e9;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-weight: bold;
+}
+
+.logo {
+  font-size: 20px;
+}
+
+/* TITULO */
+.title {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* CARD CONVERSOR */
+.converter-card {
+  width: 80%;
+  margin: auto;
+  background: white;
+  border-radius: 25px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* SECCIONES */
+.left, .right {
+  width: 35%;
+}
+
+.middle {
+  display: flex;
+  align-items: center;
+}
+
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* BANDERAS */
+.currency {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.currency img {
+  width: 30px;
+  border-radius: 50%;
+}
+
+/* BOTÓN SWAP */
+.swap {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* BOTÓN CONVERTIR */
+.convert-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* RESULTADO */
+.result {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* TABLA */
+.table-section {
+  width: 80%;
+  margin: 40px auto;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  background: #e5e7eb;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.cell {
+  width: 33%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cell img {
+  width: 25px;
+}
+
+/* FOOTER */
+.footer {
+  background: #0ea5e9;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  margin-top: 50px;
+}
+
+.footer-logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.socials span {
+  margin: 0 5px;
+  cursor: pointer;
+}

@@ -1,18 +1,20 @@
 <?php
 
-require_once '../vendor/autoload.php';
+header("Access-Control-Allow-Origin: *");
 
-use App\Services\FavoriteService;
+include("../config/conexion.php");
 
 $data = json_decode(
     file_get_contents("php://input")
 );
 
-$service = new FavoriteService();
+$sql = "INSERT INTO favoritos
+(usuario_id,moneda)
+VALUES(
+'$data->usuario_id',
+'$data->moneda'
+)";
 
-$result = $service->save(
-    $data->usuario_id,
-    $data->moneda
-);
+$conexion->query($sql);
+?>
 
-echo json_encode($result);

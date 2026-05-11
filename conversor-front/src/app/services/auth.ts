@@ -1,14 +1,30 @@
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
+
 export class Auth {
-  registro(datos:any){
-  return this.http.post(
-    'http://localhost/Proyect/public/register.php',
-    datos
-  );
+
+  api ='http://localhost/Proyect/public/';
+  
+
+  constructor(private http: HttpClient) {}
+
+  register(data:any){
+
+    return this.http.post(
+      this.api + 'register.php',
+      data
+    );
+  }
+    login(data:any){
+
+    return this.http.post(
+      this.api + 'login.php',
+      data
+    );
+  }
 }
 
-}
