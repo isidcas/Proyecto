@@ -1,79 +1,125 @@
-/* CENTRADO */
-.register-container {
+/* Contenedor principal a pantalla completa */
+.auth-page {
+  background-color: #29B6F6;
   height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #1e3a8a, #0ea5e9);
-  font-family: Arial, sans-serif;
+  justify-content: center;
+  font-family: 'Arial Black', Gadget, sans-serif;
+  margin: 0;
 }
 
-/* CARD */
+/* Tarjeta blanca central (Igual que el conversor) */
 .register-card {
   background: white;
-  padding: 40px;
-  border-radius: 20px;
-  width: 320px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  padding: 50px 40px;
+  border-radius: 50px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-/* TITULO */
-.register-card h1 {
-  margin-bottom: 10px;
-  color: #1e3a8a;
+.header-auth {
+  margin-bottom: 30px;
 }
 
-/* SUBTITULO */
+.logo-text {
+  color: #039BE5;
+  font-size: 2.2rem;
+  margin: 0;
+}
+
 .subtitle {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 20px;
+  color: #666;
+  font-size: 0.9rem;
+  font-family: Arial, sans-serif;
 }
 
-/* INPUTS */
-input {
+/* Estilo de los campos de entrada */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: #333;
+  margin-bottom: 8px;
+  margin-left: 5px;
+}
+
+.input-group input {
   width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  padding: 14px 18px;
+  border: 2px solid #E1F5FE;
+  border-radius: 15px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
   outline: none;
-  transition: 0.3s;
+  border-color: #29B6F6;
+  background-color: #F9FEFF;
 }
 
-input:focus {
-  border-color: #0ea5e9;
-  box-shadow: 0 0 5px rgba(14,165,233,0.4);
-}
-
-/* BOTÓN */
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  background: #1e3a8a;
-  border: none;
+/* Botón principal */
+.btn-register {
+  background-color: #3949AB;
   color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 30px;
+  font-size: 1.1rem;
   font-weight: bold;
-  border-radius: 10px;
   cursor: pointer;
-  transition: 0.3s;
+  margin-top: 10px;
+  transition: transform 0.2s, background-color 0.3s;
 }
 
-button:hover {
-  background: #2563eb;
+.btn-register:hover {
+  background-color: #283593;
+  transform: translateY(-2px);
 }
 
-/* LINK */
-.link {
-  margin-top: 15px;
-  font-size: 13px;
-  color: #6b7280;
+.btn-register:active {
+  transform: translateY(0);
 }
 
-.link a {
-  color: #0ea5e9;
+/* Mensajes de error */
+.error-banner {
+  background-color: #FFEBEE;
+  color: #D32F2F;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-family: Arial, sans-serif;
+}
+
+/* Footer de la tarjeta */
+.footer-auth {
+  margin-top: 25px;
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.link-login {
+  color: #3949AB;
   text-decoration: none;
   font-weight: bold;
+  margin-left: 5px;
+}
+
+.link-login:hover {
+  text-decoration: underline;
 }

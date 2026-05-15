@@ -1,9 +1,10 @@
 <nav class="navbar">
-  <div class="logo">FOREX365</div>
-
-  <ul>
-    <li><a routerLink="/dashboard">Conversor</a></li>
-    <li><a routerLink="/historial">Historial</a></li>
-    <li><a routerLink="/">Login</a></li>
+  <div class="nav-brand">FOREX365</div>
+  <ul class="nav-links">
+    <li><a routerLink="/dashboard" routerLinkActive="active">CONVERSOR</a></li>
+    <li><a routerLink="/historial" routerLinkActive="active">HISTORIAL</a></li>
   </ul>
+  <div class="nav-user">
+    <button routerLink="/login" class="btn-logout">SALIR ⎗</button>
+  </div>
 </nav>

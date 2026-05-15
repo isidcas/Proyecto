@@ -1,0 +1,14 @@
+.history-page { background: #29B6F6; min-height: 100vh; padding: 50px 20px; font-family: 'Arial Black', sans-serif; }
+.card-container { background: white; max-width: 850px; margin: 0 auto; border-radius: 40px; padding: 40px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+.history-title { color: #3949AB; text-align: center; margin-bottom: 30px; font-size: 1.8rem; }
+
+.modern-table { width: 100%; border-collapse: collapse; }
+.modern-table th { text-align: left; padding: 15px; color: #aaa; border-bottom: 2px solid #f0f0f0; font-size: 0.7rem; }
+.modern-table td { padding: 15px; border-bottom: 1px solid #f9f9f9; font-family: Arial, sans-serif; }
+
+.date-text { color: #888; font-size: 0.85rem; }
+.amount-text { font-weight: bold; color: #333; }
+.symbol-text { color: #29B6F6; }
+.result-text { font-weight: 900; color: #3949AB; font-size: 1.1rem; }
+
+.no-data { text-align: center; padding: 40px; color: #999; }

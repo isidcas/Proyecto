@@ -1,15 +1,14 @@
 import { Routes } from '@angular/router';
-import { Login } from './pages/login/login';
-import { Register } from './pages/register/register';
 import { Dashboard } from './pages/dashboard/dashboard';
-import { Historial } from './pages/historial/historial';
-import { Contacto } from './pages/contacto/contacto';
+import { HistoryPage } from './pages/history/history'; // Crea esta clase
+import { Login } from './pages/login/login';
+import { RegisterPage } from './pages/register/register';
+
 
 export const routes: Routes = [
-{path:'', component: Login },
-  { path:'registro', component: Register },
-  { path:'dashboard', component: Dashboard },
-  { path:'historial', component: Historial },
-  { path:'contacto', component: Contacto }
-
+  { path: 'dashboard', component: Dashboard },
+  { path: 'historial', component: HistoryPage },
+  { path: 'login', component: Login },
+  { path: 'register', component: RegisterPage},
+  { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

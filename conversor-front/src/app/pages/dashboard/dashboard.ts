@@ -1,32 +1,127 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Conversion } from '../../services/conversion';
-import { Navbar } from '../../components/navbar/navbar';
+import { HttpClientModule } from '@angular/common/http';
+import Chart from 'chart.js/auto';
+import { Navbar } from "../../components/navbar/navbar";
+import { ConversionService } from '../../services/conversion';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar],
+  imports: [CommonModule, FormsModule, HttpClientModule, Navbar],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrls: ['./dashboard.css']
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
+  conversion = { cantidad: 1, origen: 'EUR', destino: 'USD' };
+  resultado: number | null = null;
+  tasaCambio: number | null = null;
+  divisasSoportadas: string[] = ['EUR', 'USD', 'GBP', 'JPY', 'MXN']; 
 
-  conversion = {
-    origen: 'USD',
-    destino: 'EUR',
-    cantidad: 0
-  };
+  // 1. VALORES ESTÁTICOS: Para que la interfaz nunca esté vacía
+  marketRates: any[] = [
+    { codigo: 'USD', valor: 1.08, data: [1.07, 1.09, 1.08, 1.08] },
+    { codigo: 'GBP', valor: 0.85, data: [0.84, 0.86, 0.85, 0.85] },
+    { codigo: 'JPY', valor: 162.5, data: [161, 163, 162, 162.5] },
+    { codigo: 'MXN', valor: 18.2, data: [18.0, 18.4, 18.1, 18.2] }
+  ];
 
-  resultado: any = null;
+  private charts: any[] = [];
 
-  constructor(private service: Conversion) {}
+  constructor(private conversionService: ConversionService) {}
+
+  ngOnInit() {
+    this.cargarDivisas();
+    // Renderizado inicial con datos estáticos
+    setTimeout(() => this.renderCharts(), 500);
+  }
+
+  cargarDivisas() {
+    this.conversionService.getCurrencies().subscribe({
+      next: (res) => {
+        if (res) {
+          this.divisasSoportadas = Object.keys(res);
+          this.actualizarMercado();
+        }
+      },
+      error: () => console.warn("Usando lista de divisas estática")
+    });
+  }
 
   convertir() {
-    this.service.convertir(this.conversion)
-      .subscribe((res: any) => {
-        this.resultado = res.resultado;
-      });
+    if (this.conversion.cantidad <= 0) return;
+
+    this.conversionService.convertir({
+      amount: this.conversion.cantidad,
+      from: this.conversion.origen,
+      to: this.conversion.destino
+    }).subscribe({
+      next: (res: any) => {
+        // Validación para evitar el error de 'undefined'
+        if (res?.rates && res.rates[this.conversion.destino]) {
+          this.resultado = res.rates[this.conversion.destino];
+          this.tasaCambio = this.resultado! / this.conversion.cantidad;
+        }
+      }
+    });
+  }
+
+  actualizarMercado() {
+    this.conversionService.getMarketRates().subscribe({
+      next: (res: any) => {
+        const populares = ['USD', 'GBP', 'JPY', 'MXN'];
+        
+        // CORRECCIÓN CRÍTICA: Validamos que res.rates exista antes de mapear
+        if (res?.rates) {
+          this.marketRates = populares.map(code => {
+            // Si la moneda no existe en la respuesta, usamos el valor estático previo
+            const valorApi = res.rates[code];
+            const valorFinal = valorApi ? valorApi : (this.marketRates.find(m => m.codigo === code)?.valor || 0);
+
+            return {
+              codigo: code,
+              valor: valorFinal,
+              data: [valorFinal * 0.99, valorFinal * 1.01, valorFinal * 0.98, valorFinal]
+            };
+          });
+          setTimeout(() => this.renderCharts(), 100);
+        }
+      },
+      error: () => console.log("Manteniendo datos de mercado estáticos")
+    });
+  }
+
+  renderCharts() {
+    // Destruir instancias previas para evitar el error "Canvas is already in use"
+    this.charts.forEach(c => c.destroy());
+    this.charts = [];
+
+    this.marketRates.forEach(r => {
+      const el = document.getElementById(`chart-${r.codigo}`) as HTMLCanvasElement;
+      if (el) {
+        const chart = new Chart(el, {
+          type: 'line',
+          data: {
+            labels: ['', '', '', ''],
+            datasets: [{ 
+              data: r.data, 
+              borderColor: '#6200ee', 
+              borderWidth: 2, 
+              pointRadius: 0, 
+              fill: false, 
+              tension: 0.4 
+            }]
+          },
+          options: { 
+            plugins: { legend: { display: false } }, 
+            scales: { x: { display: false }, y: { display: false } },
+            responsive: true, 
+            maintainAspectRatio: false 
+          }
+        });
+        this.charts.push(chart);
+      }
+    });
   }
 }

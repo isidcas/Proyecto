@@ -1,71 +1,35 @@
 <?php
-
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json; charset=UTF-8");
 
-// Leer JSON
-$json = file_get_contents("php://input");
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit; }
 
-$data = json_decode($json);
+// Capturamos los datos que vienen de Angular
+$method = $_SERVER['REQUEST_METHOD'];
 
-// Validar JSON
-if (!$data) {
-    echo json_encode([
-        "error" => "JSON inválido o vacío"
-    ]);
+// Si Angular pide la lista de monedas (GET)
+if ($method === 'GET' && isset($_GET['action']) && $_GET['action'] === 'currencies') {
+    echo file_get_contents('https://api.frankfurter.app/currencies');
     exit;
 }
 
-// Validar campos
-if (
-    !isset($data->origen) ||
-    !isset($data->destino) ||
-    !isset($data->cantidad)
-) {
-    echo json_encode([
-        "error" => "Faltan datos"
-    ]);
-    exit;
+// Si Angular pide una conversión (POST)
+$data = json_decode(file_get_contents('php://input'), true);
+
+if ($data) {
+    $amount = $data['amount'];
+    $from = $data['from'];
+    $to = $data['to'];
+
+    $url = "https://api.frankfurter.app/latest?amount=$amount&from=$from&to=$to";
+    $response = file_get_contents($url);
+    
+    // Opcional: Aquí podrías conectar a tu BD Docker conversor-api-db-1
+    // para guardar un log de la conversión.
+
+    echo $response;
+} else {
+    echo json_encode(["error" => "No se recibieron parámetros"]);
 }
-
-$origen = strtoupper($data->origen);
-$destino = strtoupper($data->destino);
-$cantidad = floatval($data->cantidad);
-
-// API GRATIS Y FUNCIONAL
-$url = "https://api.frankfurter.app/latest?from=$origen&to=$destino";
-
-// Consumir API
-$response = file_get_contents($url);
-
-// Verificar conexión
-if ($response === false) {
-    echo json_encode([
-        "error" => "Error al conectar con la API"
-    ]);
-    exit;
-}
-
-// Convertir JSON
-$datos = json_decode($response, true);
-
-// Verificar tasa
-if (!isset($datos['rates'][$destino])) {
-    echo json_encode([
-        "error" => "Moneda no encontrada"
-    ]);
-    exit;
-}
-
-$tasa = $datos['rates'][$destino];
-
-$resultado = $cantidad * $tasa;
-
-// Respuesta
-echo json_encode([
-    "resultado" => round($resultado, 2)
-]);
-
-?>

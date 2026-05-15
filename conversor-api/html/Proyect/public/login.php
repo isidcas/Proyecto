@@ -1,44 +1,24 @@
 <?php
-
+require_once __DIR__ . '/../vendor/autoload.php';
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-require_once '../vendor/autoload.php';
+use App\Database\Database;
 
-use App\Services\AuthService;
+$data = json_decode(file_get_contents('php://input'), true);
 
-$data = json_decode(
-    file_get_contents("php://input")
-);
+if ($data) {
+    $db = Database::getInstance();
+    $stmt = $db->prepare("SELECT * FROM usuarios WHERE email = ?");
+    $stmt->execute([$data['email']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if(!$data){
-
-    echo json_encode([
-        "error" => "No hay datos"
-    ]);
-
-    exit;
+    // Verificamos password contra el hash de la BD
+    if ($user && password_verify($data['password'], $user['password'])) {
+        unset($user['password']); // Quitamos la pass antes de enviar al front
+        echo json_encode(["user" => $user]);
+    } else {
+        echo json_encode(["error" => "No autorizado"]);
+    }
 }
-
-if(
-    !isset($data->email) ||
-    !isset($data->password)
-){
-
-    echo json_encode([
-        "error" => "Faltan datos"
-    ]);
-
-    exit;
-}
-
-$service = new AuthService();
-
-$result = $service->login(
-    $data->email,
-    $data->password
-);
-
-echo json_encode($result);
