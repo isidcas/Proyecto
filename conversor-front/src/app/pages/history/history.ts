@@ -12,10 +12,21 @@ import { Navbar } from '../../components/navbar/navbar';
 })
 export class HistoryPage implements OnInit {
   historial: any[] = [];
+  emailUsuario: string = '';
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get('http://localhost/Proyect/public/get-history.php?usuario_id=1')
-      .subscribe((res: any) => this.historial = res);
+  const userSession = localStorage.getItem('usuario');
+  if (userSession) {
+    const user = JSON.parse(userSession);
+    const usuarioId = user.id ? user.id : 1; // Recuperamos su ID numérico
+
+    this.http.get(`http://localhost/Proyect/public/get-history.php?usuario_id=${usuarioId}`)
+      .subscribe({
+        next: (res: any) => this.historial = res.error ? [] : res,
+        error: (err) => console.error(err)
+      });
   }
+}
 }

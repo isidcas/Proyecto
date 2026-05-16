@@ -5,7 +5,7 @@
     <h2 class="history-title">HISTORIAL DE CONVERSIONES</h2>
     
     <div class="table-wrapper">
-      <table class="modern-table">
+      <table class="modern-table" *ngIf="historial.length > 0">
         <thead>
           <tr>
             <th>FECHA</th>

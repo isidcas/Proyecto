@@ -48,25 +48,39 @@ export class Dashboard implements OnInit {
       error: () => console.warn("Usando lista de divisas estática")
     });
   }
-
-  convertir() {
+convertir() {
     if (this.conversion.cantidad <= 0) return;
 
+    // 1. Recuperamos el ID numérico del usuario logueado
+    const userSession = localStorage.getItem('usuario');
+    let usuarioId = 1; // Valor por defecto numérico si no hay sesión para pruebas
+
+    if (userSession) {
+      const user = JSON.parse(userSession);
+      if (user && user.id) {
+        usuarioId = Number(user.id); // Nos aseguramos de que sea un número entero
+      }
+    }
+
+    console.log("Enviando POST a convert.php con ID de usuario:", usuarioId);
+
+    // 2. Enviamos el objeto con el ID numérico
     this.conversionService.convertir({
       amount: this.conversion.cantidad,
       from: this.conversion.origen,
-      to: this.conversion.destino
+      to: this.conversion.destino,
+      usuario_id: usuarioId // <-- Cambiamos 'email' por 'usuario_id' numérico
     }).subscribe({
       next: (res: any) => {
-        // Validación para evitar el error de 'undefined'
         if (res?.rates && res.rates[this.conversion.destino]) {
           this.resultado = res.rates[this.conversion.destino];
           this.tasaCambio = this.resultado! / this.conversion.cantidad;
         }
-      }
+      },
+      error: (err) => console.error("Error en la conversión:", err)
     });
   }
-
+  
   actualizarMercado() {
     this.conversionService.getMarketRates().subscribe({
       next: (res: any) => {

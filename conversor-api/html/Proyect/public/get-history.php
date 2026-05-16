@@ -1,35 +1,28 @@
 <?php
-// Desactivamos errores en pantalla para que no ensucien el JSON si algo falla
-error_reporting(0);
-ini_set('display_errors', 0);
-
-require_once __DIR__ . '/../vendor/autoload.php';
-
-// Cabeceras obligatorias para Angular
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Content-Type: application/json; charset=UTF-8");
 
-use App\Models\History;
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') { exit(0); }
 
-// 1. Capturamos el usuario_id de la URL
-$usuario_id = isset($_GET['usuario_id']) ? intval($_GET['usuario_id']) : 1;
+if (isset($_GET['usuario_id']) && !empty($_GET['usuario_id'])) {
+    $usuario_id = intval($_GET['usuario_id']);
 
-try {
-    // 2. Llamamos al modelo (el que usa PDO)
-    $datos = History::getByUser($usuario_id);
-    
-    // 3. Si no hay datos, devolvemos un array vacío [] en vez de un error
-    if (!$datos) {
-        echo json_encode([]);
-    } else {
-        echo json_encode($datos);
+    try {
+        $db = new PDO("mysql:host=conversor-api-db-1;dbname=conversor_divisas;charset=utf8", "root", "root");
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $db->prepare("SELECT fecha, cantidad, moneda_origen, resultado, moneda_destino FROM historial WHERE usuario_id = ? ORDER BY fecha DESC LIMIT 30");
+        $stmt->execute([$usuario_id]);
+        
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($rows ? $rows : []);
+        exit;
+
+    } catch(PDOException $e) {
+        echo json_encode(["error" => $e->getMessage()]); exit;
     }
-
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        "error" => "Error en la consulta",
-        "mensaje" => $e->getMessage()
-    ]);
+} else {
+    echo json_encode(["error" => "Falta el parámetro usuario_id"]); exit;
 }

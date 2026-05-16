@@ -23,4 +23,9 @@ export class ConversionService {
   getMarketRates(): Observable<any> {
     return this.http.get(`${this.url}?action=market`);
   }
+
+  getHistorial(email: string): Observable<any> {
+  // Apuntamos directamente a tu archivo existente
+  return this.http.get(`http://localhost/Proyect/public/get-history.php?email=${email}`);
+}
 }
