@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
-  url = 'http://localhost/api'; // Ajusta según tu ruta
+  // 🔽 CAMBIAMOS ESTA LÍNEA: Pon la URL de tu backend en Render
+  // (Si en Render configuraste el Publish Directory como 'public', quita el '/public' de la URL)
+  url = 'https://conversor-divisas-backend.onrender.com/public'; 
 
   constructor(private http: HttpClient) {}
 
