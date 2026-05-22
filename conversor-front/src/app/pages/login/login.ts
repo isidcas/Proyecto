@@ -21,7 +21,7 @@ export class Login {
 
   onLogin() {
     if (this.loginForm.valid) {
-      this.http.post('http://localhost/Proyect/public/login.php', this.loginForm.value)
+      this.http.post('https://conversor-divisas-backend.onrender.com/public/login.php', this.loginForm.value)
         .subscribe({
           next: (res: any) => {
             if (res.user) {

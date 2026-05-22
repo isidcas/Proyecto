@@ -23,7 +23,7 @@ export class RegisterPage {
 
   onRegister() {
   if (this.registerForm.valid) {
-    this.http.post('http://localhost/Proyect/public/register.php', this.registerForm.value)
+    this.http.post('https://conversor-divisas-backend.onrender.com/public/register.php', this.registerForm.value)
       .subscribe({
         next: (res: any) => {
           // IMPORTANTE: El registro devuelve "success", no "user"

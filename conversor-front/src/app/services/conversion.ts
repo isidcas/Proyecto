@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class ConversionService {
   // Asegúrate de que esta URL sea la correcta de tu contenedor PHP
-  private url = 'http://localhost/Proyect/public/convert.php';
+  private url = 'https://conversor-divisas-backend.onrender.com/public/convert.php';
 
   constructor(private http: HttpClient) {}
 
