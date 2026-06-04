@@ -15,7 +15,7 @@ if ($databaseUrl) {
             'user'    => $fields['user'],
             'pass'    => $fields['pass'],
             'ssl'     => true,
-            'ssl_ca'  => __DIR__ . '/ca.pem' // El certificado que descarga el Dockerfile
+            'ssl_ca'  => __DIR__ . '/ca.pem' // CORREGIDO: Está en la misma raíz que config.php
         ]
     ];
 } else {
