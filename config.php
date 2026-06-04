@@ -4,15 +4,12 @@
 $databaseUrl = getenv('DATABASE_URL');
 
 if ($databaseUrl) {
-    // Intentamos trocear la URI
     $fields = parse_url($databaseUrl);
     
-    // Si parse_url funciona correctamente, extraemos los datos. 
-    // Si da problemas, usamos los valores fijos como plan de respaldo seguro.
     $host   = isset($fields['host']) ? $fields['host'] : 'mysql-3d75911a-project-fa07.f.aivencloud.com';
     $port   = isset($fields['port']) ? $fields['port'] : '12199';
     $user   = isset($fields['user']) ? $fields['user'] : 'avnadmin';
-    $pass   = isset($fields['pass']) ? $fields['pass'] : 'AVNS_s7tlsyd294ktrkd1MaX';
+    $pass   = isset($fields['pass']) ? $fields['pass'] : ''; // Dejar vacío o leer de getenv
     $dbname = isset($fields['path']) ? ltrim($fields['path'], '/') : 'defaultdb';
 
     return [
