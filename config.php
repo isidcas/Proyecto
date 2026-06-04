@@ -4,18 +4,26 @@
 $databaseUrl = getenv('DATABASE_URL');
 
 if ($databaseUrl) {
-    // Si existe DATABASE_URL, troceamos la URI de Aiven automáticamente
+    // Intentamos trocear la URI
     $fields = parse_url($databaseUrl);
     
+    // Si parse_url funciona correctamente, extraemos los datos. 
+    // Si da problemas, usamos los valores fijos como plan de respaldo seguro.
+    $host   = isset($fields['host']) ? $fields['host'] : 'mysql-3d75911a-project-fa07.f.aivencloud.com';
+    $port   = isset($fields['port']) ? $fields['port'] : '12199';
+    $user   = isset($fields['user']) ? $fields['user'] : 'avnadmin';
+    $pass   = isset($fields['pass']) ? $fields['pass'] : 'AVNS_s7tlsyd294ktrkd1MaX';
+    $dbname = isset($fields['path']) ? ltrim($fields['path'], '/') : 'defaultdb';
+
     return [
         'db' => [
-            'host'    => $fields['host'],
-            'port'    => $fields['port'] ?? '12199',
-            'dbname'  => 'defaultdb', // Aiven usa defaultdb por defecto
-            'user'    => $fields['user'],
-            'pass'    => $fields['pass'],
+            'host'    => $host,
+            'port'    => $port,
+            'dbname'  => $dbname,
+            'user'    => $user,
+            'pass'    => $pass,
             'ssl'     => true,
-            'ssl_ca'  => __DIR__ . '/ca.pem' // CORREGIDO: Está en la misma raíz que config.php
+            'ssl_ca'  => __DIR__ . '/ca.pem'
         ]
     ];
 } else {
