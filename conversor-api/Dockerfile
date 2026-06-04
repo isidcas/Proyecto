@@ -24,6 +24,4 @@ COPY . /var/www/html
 RUN chown -R www-data:www-data /var/www/html
 
 # Instalar dependencias
-RUN composer install --no-interaction --optimize-autoloader
-
 EXPOSE 80
