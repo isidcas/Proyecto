@@ -4,27 +4,21 @@
 $databaseUrl = getenv('DATABASE_URL');
 
 if ($databaseUrl) {
+    // Si existe DATABASE_URL, troceamos la nueva URI de Aiven
     $fields = parse_url($databaseUrl);
     
-    $host   = isset($fields['host']) ? $fields['host'] : 'mysql-3d75911a-project-fa07.f.aivencloud.com';
-    $port   = isset($fields['port']) ? $fields['port'] : '12199';
-    $user   = isset($fields['user']) ? $fields['user'] : 'avnadmin';
-    $pass   = isset($fields['pass']) ? $fields['pass'] : ''; // Dejar vacío o leer de getenv
-    $dbname = isset($fields['path']) ? ltrim($fields['path'], '/') : 'defaultdb';
-
     return [
         'db' => [
-            'host'    => $host,
-            'port'    => $port,
-            'dbname'  => $dbname,
-            'user'    => $user,
-            'pass'    => $pass,
-            'ssl'     => true,
-            'ssl_ca'  => __DIR__ . '/ca.pem'
+            'host'    => $fields['host'],
+            'port'    => $fields['port'] ?? '12199',
+            'dbname'  => 'defaultdb',
+            'user'    => $fields['user'],
+            'pass'    => $fields['pass'],
+            'ssl'     => true
         ]
     ];
 } else {
-    // 2. Si no existe, estamos en tu entorno LOCAL (Docker)
+    // 2. Si no existe, estamos en tu entorno LOCAL (Docker de clase)
     return [
         'db' => [
             'host'    => 'conversor-api-db-1',
