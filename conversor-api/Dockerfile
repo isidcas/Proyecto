@@ -1,25 +1,35 @@
 FROM php:8.2-apache
 
-# Instala Xdebug y las dependencias necesarias
-RUN pecl install -o -f xdebug \
-    && docker-php-ext-enable xdebug
-    
-    
-# Actualizamos los repositorios y las herramientas esenciales
+# Actualizar e instalar extensiones necesarias
 RUN apt-get update && apt-get install -y \
+    libpng-dev \
+    zlib1g-dev \
+    libxml2-dev \
     libzip-dev \
+    zip \
     unzip \
-    && docker-php-ext-install zip
+    git \
+    wget \
+    && docker-php-ext-install pdo_mysql zip
 
-# Instalamos las extensiones necesarias para MySQL
-RUN docker-php-ext-install pdo pdo_mysql mysqli
+# Activar el módulo rewrite de Apache
+RUN a2enmod rewrite
 
 # Instalar Composer
-RUN curl -sS https://getcomposer.org/installer | php -- \
-    && mv composer.phar /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copia el contenido de la carpeta actual (conversor-api) hacia la raíz de Apache
-COPY . /var/www/html/
+WORKDIR /var/www/html
 
-# Da los permisos necesarios a Apache
+# Copiar los archivos del proyecto
+COPY . /var/www/html
+
+# DESCARGAR EL CERTIFICADO SSL DE AIVEN DIRECTAMENTE EN LA RAÍZ DEL PROYECTO
+RUN wget https://api.aiven.io/v1/project/fa07/service/mysql-236bdb45-project-fa07/ca -O /var/www/html/ca.pem
+
+# Dar permisos correctos
 RUN chown -R www-data:www-data /var/www/html
+
+# Ejecutar composer
+RUN composer install --no-interaction --optimize-autoloader
+
+EXPOSE 80
