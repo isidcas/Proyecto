@@ -12,16 +12,18 @@ RUN apt-get update && apt-get install -y \
 # Activar el módulo rewrite
 RUN a2enmod rewrite
 
+# REDIRECCIÓN: Cambiar el DocumentRoot de Apache a la carpeta public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copiar todo el proyecto (esto ya incluye tu archivo ca.pem local)
+# Copiar todo el proyecto al contenedor
 COPY . /var/www/html
 
-# Dar permisos
+# Ajustar permisos: Es vital que www-data sea dueño de public
 RUN chown -R www-data:www-data /var/www/html
 
-# Instalar dependencias
 EXPOSE 80
