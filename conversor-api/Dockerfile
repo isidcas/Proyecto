@@ -1,29 +1,21 @@
 FROM php:8.2-apache
 
-# Instalar dependencias
+# 1. Instalar dependencias
 RUN apt-get update && apt-get install -y libpng-dev libzip-dev zip unzip git \
     && docker-php-ext-install pdo_mysql zip
 
-# Activar mod_rewrite
+# 2. Activar mod_rewrite para que tu .htaccess funcione
 RUN a2enmod rewrite
 
-# Instalar Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# 3. Configurar Apache para apuntar directamente a tu subcarpeta
+# Esto le dice a Apache que la raíz del servidor es donde está tu index.php
+RUN sed -i 's|/var/www/html|/var/www/html/html/Proyect/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Copiar todo el contenido a una carpeta temporal
-COPY . /tmp/proyecto
+# 4. Copiar TODO tu proyecto (conversor-api) a la carpeta base de Apache
+WORKDIR /var/www/html
+COPY . .
 
-# MOVER TUS ARCHIVOS A LA RAÍZ DE APACHE
-# Esto toma tu carpeta 'public' y la pone en /var/www/html
-RUN mv /tmp/proyecto/html/Proyect/public/* /var/www/html/
-
-# Asegurar que el resto de tu código (App, etc.) esté disponible
-RUN mv /tmp/proyecto/html/Proyect/App /var/www/html/App
-
-# Limpiar archivos temporales
-RUN rm -rf /tmp/proyecto
-
-# Dar permisos
-RUN chown -R www-data:www-data /var/www/html
+# 5. Dar permisos (al hacer chown sobre el directorio actual '.', funcionará siempre)
+RUN chown -R www-data:www-data .
 
 EXPOSE 80
