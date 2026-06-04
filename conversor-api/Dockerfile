@@ -18,8 +18,8 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN curl -sS https://getcomposer.org/installer | php -- \
     && mv composer.phar /usr/local/bin/composer
 
-    # Copia todo el contenido de tu carpeta 'html' directamente a la raíz web de Apache
-COPY ./html/ /var/www/html/
+# Copia el contenido de la carpeta actual (conversor-api) hacia la raíz de Apache
+COPY . /var/www/html/
 
-# Da los permisos necesarios a Apache para poder leer los archivos
+# Da los permisos necesarios a Apache
 RUN chown -R www-data:www-data /var/www/html
