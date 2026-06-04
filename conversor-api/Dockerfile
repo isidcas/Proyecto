@@ -5,14 +5,17 @@ RUN apt-get update && apt-get install -y libpng-dev libzip-dev zip unzip git \
 
 RUN a2enmod rewrite
 
-# ESTE ES EL CAMBIO MÁS SEGURO
-# Editamos el archivo de configuración de Apache para que apunte directamente a 'public'
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+# 1. ESTO ES LO IMPORTANTE: Apuntamos directamente a tu carpeta 'public'
+RUN sed -i 's|/var/www/html|/var/www/html/html/Proyect/public|g' /etc/apache2/sites-available/000-default.conf
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# 2. Tu código está aquí dentro
 WORKDIR /var/www/html
+
 COPY . .
 
-# Aseguramos permisos
-RUN chown -R www-data:www-data /var/www/html/public
+# 3. Permisos a la carpeta real
+RUN chown -R www-data:www-data /var/www/html/html/Proyect/public
 
 EXPOSE 80
