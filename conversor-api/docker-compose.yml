@@ -5,8 +5,8 @@ services:
     depends_on:
       - db
     volumes:
-      - ./html:/var/www/html
-      - ./php.ini:/usr/local/etc/php/php.ini    # Mapea el archivo php.ini con la configuración de Xdebug
+      - .:/var/www/html 
+      - ./php.ini:/usr/local/etc/php/php.ini
     extra_hosts:
       - host.docker.internal:host-gateway
     build:
