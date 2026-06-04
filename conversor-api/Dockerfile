@@ -10,17 +10,20 @@ RUN a2enmod rewrite
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurar Apache para que apunte a tu carpeta profunda
-RUN sed -i 's|/var/www/html|/var/www/html/html/Proyect/public|g' /etc/apache2/sites-available/000-default.conf
+# Copiar todo el contenido a una carpeta temporal
+COPY . /tmp/proyecto
 
-# Definir directorio de trabajo
-WORKDIR /var/www/html
+# MOVER TUS ARCHIVOS A LA RAÍZ DE APACHE
+# Esto toma tu carpeta 'public' y la pone en /var/www/html
+RUN mv /tmp/proyecto/html/Proyect/public/* /var/www/html/
 
-# Copiar todo el contenido del repositorio al contenedor
-COPY . .
+# Asegurar que el resto de tu código (App, etc.) esté disponible
+RUN mv /tmp/proyecto/html/Proyect/App /var/www/html/App
 
-# CAMBIO CRÍTICO: Damos permisos a TODO el directorio de trabajo recursivamente.
-# Esto evita que falle si una subcarpeta específica no existe aún.
+# Limpiar archivos temporales
+RUN rm -rf /tmp/proyecto
+
+# Dar permisos
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
